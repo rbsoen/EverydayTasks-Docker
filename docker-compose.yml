@@ -1,0 +1,38 @@
+version: "3.9"
+    
+services:
+  main:
+    build: .
+    depends_on:
+      - db
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8000:80"
+  
+  db:
+    image: mariadb:11.1.2
+    volumes:
+      - ./config/mysql:/docker-entrypoint-initdb.d
+      - etasks-db:/var/lib/mysql
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: everydaytasks
+      MARIADB_USER: everydaytasks
+      MARIADB_PASSWORD: everydaytasks
+  
+  # management console (map to :8001)
+  phpma:
+    image: beeyev/phpmyadmin-lightweight:latest
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - "8001:80"
+    environment:
+      - PMA_ARBITRARY=1
+  
+volumes:
+  etasks-db: {}
+

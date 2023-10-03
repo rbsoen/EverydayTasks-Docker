@@ -1,0 +1,3 @@
+[submodule "EverydayTasks"]
+	path = EverydayTasks
+	url = https://github.com/rbsoen/EverydayTasks
